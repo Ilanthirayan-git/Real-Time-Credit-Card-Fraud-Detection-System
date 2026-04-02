@@ -31,6 +31,8 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 * **Explainability:** SHAP, Matplotlib
 * **Backend:** FastAPI, Uvicorn, Pydantic
 * **Frontend:** Streamlit, Requests
+* **Testing:** Pytest, HTTPX
+* **Deployment:** Docker
 
 ---
 
@@ -39,6 +41,17 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 2. **Training Orchestration**: The `train_model` script actively rebalances datasets, trains tree models, logs evaluation metrics (Recall, Precision, F1), and saves artifacts (model & scaler) to disk via `.joblib`.
 3. **Inference Flow**: Incoming API requests are parsed into a schema. Features are transformed by the cached scaler, passed to the best model, and then routed to the SHAP explainer to calculate feature importance weights.
 4. **Presentation Layer**: Streamlit consumes the FastAPI `/predict` JSON responses and visualizes predictions via alert components and Matplotlib bar charts.
+
+---
+
+## 📸 Screenshots
+
+| Manual Inference | Batch Evaluation Dashboard |
+| :---: | :---: |
+| ![manual](https://via.placeholder.com/400x250.png?text=Manual+Transaction+Input) | ![batch](https://via.placeholder.com/400x250.png?text=Batch+CSV+Upload+Dashboard) |
+| *Form inputs validating user metrics* | *Visualizing Fraud Distribution over time* |
+
+*(Note: Replace with actual screenshots of your dashboard before portfolio publication)*
 
 ---
 
@@ -53,10 +66,13 @@ fraud-detection/
 │   └── app.py             # Dashboard UI logic
 │
 ├── data/                  # Datasets & examples
-│   ├── sample_request.json# Sample JSON for API testing
+│   ├── sample_request.json# Sample JSON for API testing 
+│   └── transactions.csv   # Auto-generated dataset (gitignored)
 │   
 ├── models/                # Saved ML artifacts (gitignored)
 │   ├── best_model.joblib
+│   ├── explainer.joblib
+│   └── scaler.joblib
 │
 ├── src/                   # Machine learning core
 │   ├── preprocessing.py   # Transformation & data ops
@@ -65,3 +81,104 @@ fraud-detection/
 │
 ├── tests/                 # Built-in unit tests
 │   └── test_api.py        # Validates endpoints with Mock Inference
+│
+├── .gitignore             # Git exclusions
+├── Dockerfile             # Container configuration
+├── requirements.txt       # Software dependencies
+└── README.md              # Project documentation
+```
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/YourUsername/Real-Time-Fraud-Detection.git
+cd Real-Time-Fraud-Detection
+```
+
+### 2. Prepare Virtual Environment
+Create and activate an isolated Python environment:
+```bash
+python -m venv venv
+
+# On Windows:
+venv\Scripts\activate
+# On Linux/MacOS:
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Generate Data and Train the Model
+Synthesize the data and export model artifacts:
+```bash
+python src/train_model.py
+```
+> *Ensure `.joblib` files appear in the `models/` directory upon completion.*
+
+### 5. Start the Application
+You will need two separate terminal windows for the frontend and backend. Both must have the `venv` active.
+
+**Terminal 1 (Backend API):**
+```bash
+# Set path to allow relative imports
+# Windows: set PYTHONPATH=src | Unix: export PYTHONPATH=src
+set PYTHONPATH=src
+uvicorn api.app:app --reload
+```
+The API is now running at `http://127.0.0.1:8000`. You can access auto-generated API docs at `http://127.0.0.1:8000/docs`.
+
+**Terminal 2 (Frontend Dashboard):**
+```bash
+set PYTHONPATH=src
+streamlit run dashboard/app.py
+```
+
+---
+
+## 🔌 API Usage Example
+
+The backend serves a raw inference predicting engine. Test it using Python `requests` or `curl`.
+
+### cURL Request
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/predict' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d @data/sample_request.json
+```
+
+### Example JSON Payload 
+*(See `data/sample_request.json` for full format)*
+```json
+{
+  "Time": 0.0,
+  "V1": -1.359807,
+  "Amount": 149.62
+  ...
+}
+```
+
+### Example Response
+```json
+{
+  "prediction": 1,
+  "fraud_probability": 0.985,
+  "is_fraud": true,
+  "execution_time_sec": 0.041
+}
+```
+
+---
+
+## 🔮 Future Improvements
+- **Kafka Integration**: Implement Apache Kafka to consume continuous streams of transaction data instead of HTTP POST batches.
+- **Model Versioning**: Implement MLflow logging to track hyperparameter tuning and model registry gracefully.
+- **Advanced Unsupervised Learning**: Train deep autoencoders as native backends for anomalous behavior detection alongside tree ensembles.
+- **Cloud Database Integration**: Write verified transactions directly to a Postgres or MongoDB cluster for historical querying on the dashboard.

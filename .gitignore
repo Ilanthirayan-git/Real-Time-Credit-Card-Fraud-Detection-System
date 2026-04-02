@@ -1,0 +1,36 @@
+# Environments
+venv/
+env/
+.env
+
+# Python compilation
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Project Specific Data & Models
+# Ignore generated datasets to save space and avoid uploading large files
+data/*.csv
+data/*.parquet
+
+# Ignore compiled large ML models
+models/*.joblib
+models/*.pkl
+models/*.h5
+models/*.pt
+
+# Testing / Coverage
+.pytest_cache/
+htmlcov/
+.coverage
