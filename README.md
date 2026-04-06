@@ -1,4 +1,4 @@
-# 🛡️ Real-Time Credit Card Fraud Detection System
+ Real-Time Credit Card Fraud Detection System
 
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green)
@@ -9,12 +9,12 @@ A complete, production-ready, end-to-end Machine Learning pipeline that detects 
 
 ---
 
-## 🎯 Problem Statement
+ Problem Statement
 Credit card fraud is a critical issue causing billions of dollars in losses annually. The core challenge in detecting it is that fraudulent transactions are extremely rare compared to legitimate ones (often < 1%). This project designs a highly sensitive, explainable machine learning system capable of identifying these rare anomalies in real-time, utilizing synthetic data generation to mimic the European Cardholder Kaggle dataset.
 
 ---
 
-## ✨ Features
+ Features
 * **Automated Data Synthesis**: Bootstraps realistic, imbalanced credit card data natively without needing Kaggle credentials.
 * **Imbalance Handling**: Combats class imbalance utilizing SMOTE (Synthetic Minority Over-sampling Technique).
 * **Model Benchmarking**: Automatically compares multiple tree-based algorithms (Random Forest, XGBoost) to find the best performing F1-Score predictor.
@@ -25,7 +25,7 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 
 ---
 
-## 🛠️ Tech Stack
+ Tech Stack
 * **Language:** Python 3.10
 * **Data Processing & ML:** Pandas, NumPy, Scikit-Learn, XGBoost, Imbalanced-Learn
 * **Explainability:** SHAP, Matplotlib
@@ -36,7 +36,7 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 
 ---
 
-## 🏛️ Architecture Explanation
+ Architecture Explanation
 1. **Data Pipeline**: The `preprocessing` module scales the raw dollar `Amount` and transaction `Time` while generating synthetic data.
 2. **Training Orchestration**: The `train_model` script actively rebalances datasets, trains tree models, logs evaluation metrics (Recall, Precision, F1), and saves artifacts (model & scaler) to disk via `.joblib`.
 3. **Inference Flow**: Incoming API requests are parsed into a schema. Features are transformed by the cached scaler, passed to the best model, and then routed to the SHAP explainer to calculate feature importance weights.
@@ -44,7 +44,7 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 
 ---
 
-## 📸 Screenshots
+Screenshots
 
 | Manual Inference | Batch Evaluation Dashboard |
 | :---: | :---: |
@@ -55,7 +55,7 @@ Credit card fraud is a critical issue causing billions of dollars in losses annu
 
 ---
 
-## 📂 Folder Structure
+ Folder Structure
 ```text
 fraud-detection/
 │
@@ -90,15 +90,15 @@ fraud-detection/
 
 ---
 
-## 🚀 Setup Instructions
+ Setup Instructions
 
-### 1. Clone the Repository
+1. Clone the Repository
 ```bash
 git clone https://github.com/YourUsername/Real-Time-Fraud-Detection.git
 cd Real-Time-Fraud-Detection
 ```
 
-### 2. Prepare Virtual Environment
+ 2. Prepare Virtual Environment
 Create and activate an isolated Python environment:
 ```bash
 python -m venv venv
@@ -109,19 +109,19 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 3. Install Dependencies
+3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Generate Data and Train the Model
+ 4. Generate Data and Train the Model
 Synthesize the data and export model artifacts:
 ```bash
 python src/train_model.py
 ```
 > *Ensure `.joblib` files appear in the `models/` directory upon completion.*
 
-### 5. Start the Application
+ 5. Start the Application
 You will need two separate terminal windows for the frontend and backend. Both must have the `venv` active.
 
 **Terminal 1 (Backend API):**
@@ -141,11 +141,11 @@ streamlit run dashboard/app.py
 
 ---
 
-## 🔌 API Usage Example
+ API Usage Example
 
 The backend serves a raw inference predicting engine. Test it using Python `requests` or `curl`.
 
-### cURL Request
+ cURL Request
 ```bash
 curl -X 'POST' \
   'http://127.0.0.1:8000/predict' \
@@ -177,7 +177,7 @@ curl -X 'POST' \
 
 ---
 
-## 🔮 Future Improvements
+ Future Improvements
 - **Kafka Integration**: Implement Apache Kafka to consume continuous streams of transaction data instead of HTTP POST batches.
 - **Model Versioning**: Implement MLflow logging to track hyperparameter tuning and model registry gracefully.
 - **Advanced Unsupervised Learning**: Train deep autoencoders as native backends for anomalous behavior detection alongside tree ensembles.
